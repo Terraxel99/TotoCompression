@@ -10,7 +10,7 @@ int main() {
     
     cv::Mat mat = cv::imread("./data/Colour/monarch.tif");
 
-    cout << "Hello there !" << endl;
+    cout << "Hello there ! :D" << endl;
     cv::imshow("test", mat);
     cv::waitKey(0);
 
