@@ -1,6 +1,5 @@
 # TotoCompression
 
-## Contents
 1. [Introduction](#intro)
 2. [Technologies](#technologies)
 3. [Features](#features)
@@ -16,7 +15,6 @@ TotoCompression is a tool I named after a french nickname that can be formed fro
 <a name="technologies"></a>
 
 ## Technologies
-***
 
 The technologies used for this project are C++ with OpenCV library to manipulate the images. To automate the build, I used CMake.
 
@@ -25,7 +23,6 @@ I wanted to keep the project as simple as possible
 <a name="features"></a>
 
 ## Features
-***
 
 For now, the program can read images and supports the following features :
 
@@ -37,7 +34,6 @@ Note that the program supports both grayscale images and coloured images without
 <a name="usage"></a>
 
 ## Program usage
-***
 
 To compress an image use the following command :
 
@@ -55,7 +51,6 @@ TotoCompression --decompress {path} [-o {output_path}]
 <a name="contributor"></a>
 
 ## Contributor
-***
 
 The only contributor to this repository is ... myself, since it was a solo school project :
 
