@@ -3,7 +3,15 @@ project(TotoCompression)
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(TotoCompression src/main.cpp)
-set_target_properties(TotoCompression PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
+set(SOURCE_FILES
+    src/image/TotoImage.cpp
+    src/image/TotoBlock.cpp
+    src/operations/TotoOperationHandler.cpp
+    src/main.cpp)
+
+add_executable(TotoCompression ${SOURCE_FILES})
+
+set_target_properties(TotoCompression PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build")
 target_link_libraries(TotoCompression ${OpenCV_LIBS})
