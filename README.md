@@ -12,6 +12,8 @@
 
 TotoCompression is a tool I named after a french nickname that can be formed from my first name (Thomas -> Toto). This tool was done in the framework of the [Visual Media Compression course](https://www.ulb.be/fr/programme/info-h516) at the [Université Libre de Bruxelles](https://www.ulb.be). The tasks that were to be done are available in the "tasks.pdf" file, at the root of this repository.
 
+The tool aims to have a simple image and video compression utility that puts in practice the concepts seen during the course.
+
 <a name="technologies"></a>
 
 ## Technologies 
