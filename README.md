@@ -14,7 +14,7 @@ TotoCompression is a tool I named after a french nickname that can be formed fro
 
 <a name="technologies"></a>
 
-## Technologies
+## Technologies 
 
 The technologies used for this project are C++ with OpenCV library to manipulate the images. To automate the build, I used CMake.
 
