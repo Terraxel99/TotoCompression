@@ -59,7 +59,6 @@ void TotoBlock::colourDCT() {
         cv::Mat channel;
         channels[i].convertTo(channel, CV_64F);
         cv::dct(channel, channel);
-        channel *= 1.0 / sqrt(2.0);
         channels[i] = channel;
     }
 
@@ -78,7 +77,6 @@ void TotoBlock::colourIDCT() {
     for (int i = 0; i < 3; i++) {
         cv::Mat channel;
         channels[i].convertTo(channel, CV_64F);
-        channel *= sqrt(2.0);
         cv::idct(channel, channel);
         channel.convertTo(channel, CV_8U);
         channels[i] = channel;
