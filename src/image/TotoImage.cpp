@@ -1,10 +1,7 @@
 #include "TotoImage.hpp"
 
-TotoImage TotoImage::fromFile(const string &filePath) {
-    time_t _tm =time(NULL);
-    struct tm* curtime = localtime(&_tm);
-    
-    return TotoImage(filePath, asctime(curtime));         
+TotoImage TotoImage::fromFile(const string &filePath) {    
+    return TotoImage(filePath, "Compressed image");         
 }
 
 TotoImage TotoImage::fromFile(const string &filePath, const string &name) {
@@ -13,7 +10,6 @@ TotoImage TotoImage::fromFile(const string &filePath, const string &name) {
 
 TotoImage::TotoImage(const string &filePath, const string &name) {
     this->baseMat = cv::imread(filePath, cv::IMREAD_UNCHANGED);
-    cout << this->baseMat.size().width << endl;
     this->name = name;
 
     this->createBlocks();
@@ -62,29 +58,29 @@ cv::Mat TotoImage::mergeBlocks() {
 }
 
 void TotoImage::compress() {
-    cout << "Compress image" << endl;
-
-    cout << "Base mat is "  << this->baseMat.type() << endl;
+    cout << "Compressing image" << endl;
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
-        currentBlock->convertTo(CV_32F);
+        currentBlock->convertTo(CV_64F);
+
         currentBlock->DCT();
+        currentBlock->quantize();
     }
 
     this->show();
 }
 
 void TotoImage::decompress() {
-    cout << "Decompress image" << endl;
-
-    cout << "Base mat is "  << this->baseMat.type() << endl;
+    cout << "Decompressing image" << endl;
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
+        currentBlock->deQuantize();
         currentBlock->IDCT();
+        
         currentBlock->convertTo(CV_8U);
     }
 

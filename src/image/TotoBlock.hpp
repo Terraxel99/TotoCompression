@@ -27,6 +27,9 @@ class TotoBlock {
         void DCT();
         void IDCT();
 
+        void quantize();
+        void deQuantize();
+
         void convertTo(int type, double scale = 1.0);
 
         void tempShow();
