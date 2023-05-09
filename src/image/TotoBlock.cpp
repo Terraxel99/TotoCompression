@@ -42,65 +42,30 @@ bool TotoBlock::isColoured() {
     return !(this->data.empty()) && this->data.channels() == 3;
 }
 
-void TotoBlock::grayDCT() {
-    cv::Mat srcFloat;
-    this->data.convertTo(srcFloat, CV_64F);
-    cv::dct(srcFloat, this->data);
-}
-
-void TotoBlock::colourDCT() {
-    cv::Mat srcFloat;
-    this->data.convertTo(srcFloat, CV_64F);
-
-    cv::Mat channels[3];
-    cv::split(srcFloat, channels);
-
-    for (int i = 0; i < 3; i++) {
-        cv::Mat channel;
-        channels[i].convertTo(channel, CV_64F);
-        cv::dct(channel, channel);
-        channels[i] = channel;
-    }
-
-    cv::merge(channels, 3, this->data);
-}
-
-void TotoBlock::grayIDCT() {
-    cv::idct(this->data, this->data);
-    this->data.convertTo(this->data, CV_8U);
-}
-
-void TotoBlock::colourIDCT() {
-    cv::Mat channels[3];
-    cv::split(this->data, channels);
-
-    for (int i = 0; i < 3; i++) {
-        cv::Mat channel;
-        channels[i].convertTo(channel, CV_64F);
-        cv::idct(channel, channel);
-        channel.convertTo(channel, CV_8U);
-        channels[i] = channel;
-    }
-
-    cv::merge(channels, 3, this->data);
+void TotoBlock::convertTo(int type, double scale) {
+    this->data.convertTo(this->data, type, scale);
 }
 
 void TotoBlock::DCT() {
-    if (this->isColoured()) {
-        this->colourDCT();
-        return;
+    vector<cv::Mat> channels;
+    cv::split(this->data, channels);
+
+    for (int channel = 0; channel < channels.size(); channel++) {
+        cv::dct(channels[channel], channels[channel]);
     }
-    
-    this->grayDCT();
+
+    cv::merge(channels, this->data);
 }
 
 void TotoBlock::IDCT() {
-    if (this->isColoured()) {
-        this->colourIDCT();
-        return;
+    vector<cv::Mat> channels;
+    cv::split(this->data, channels);
+
+    for (int channel = 0; channel < channels.size(); channel++) {
+        cv::idct(channels[channel], channels[channel]);
     }
 
-    this->grayIDCT();
+    cv::merge(channels, this->data);
 }
 
 void TotoBlock::tempShow() {

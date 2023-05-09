@@ -13,6 +13,7 @@ TotoImage TotoImage::fromFile(const string &filePath, const string &name) {
 
 TotoImage::TotoImage(const string &filePath, const string &name) {
     this->baseMat = cv::imread(filePath, cv::IMREAD_UNCHANGED);
+    cout << this->baseMat.size().width << endl;
     this->name = name;
 
     this->createBlocks();
@@ -62,9 +63,14 @@ cv::Mat TotoImage::mergeBlocks() {
 
 void TotoImage::compress() {
     cout << "Compress image" << endl;
-    
+
+    cout << "Base mat is "  << this->baseMat.type() << endl;
+
     for (int i = 0; i < this->totalNbBlocks; i++) {
-        this->getBlockAt(i)->DCT();
+        TotoBlock* currentBlock = this->getBlockAt(i);
+
+        currentBlock->convertTo(CV_32F);
+        currentBlock->DCT();
     }
 
     this->show();
@@ -73,8 +79,13 @@ void TotoImage::compress() {
 void TotoImage::decompress() {
     cout << "Decompress image" << endl;
 
+    cout << "Base mat is "  << this->baseMat.type() << endl;
+
     for (int i = 0; i < this->totalNbBlocks; i++) {
-        this->getBlockAt(i)->IDCT();
+        TotoBlock* currentBlock = this->getBlockAt(i);
+
+        currentBlock->IDCT();
+        currentBlock->convertTo(CV_8U);
     }
 
     this->show();

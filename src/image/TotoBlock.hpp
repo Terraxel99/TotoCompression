@@ -14,11 +14,6 @@ class TotoBlock {
 
         bool isColoured();
 
-        void grayDCT();
-        void colourDCT();
-        void grayIDCT();
-        void colourIDCT();
-
     public:
         TotoBlock(cv::Mat baseMat, int xOffset, int yOffset, int blockSize);
 
@@ -31,6 +26,8 @@ class TotoBlock {
 
         void DCT();
         void IDCT();
+
+        void convertTo(int type, double scale = 1.0);
 
         void tempShow();
 };
