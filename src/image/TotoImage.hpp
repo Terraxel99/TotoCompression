@@ -7,8 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "TotoBlock.hpp"
-
-#define DEFAULT_BLOCKSIZE 8
+#include "TotoConstants.hpp"
 
 using namespace std;
 
