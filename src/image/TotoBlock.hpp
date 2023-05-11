@@ -3,6 +3,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "TotoImageConstants.hpp"
+
 using namespace std;
 
 class TotoBlock {

@@ -7,7 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "TotoBlock.hpp"
-#include "TotoConstants.hpp"
+#include "TotoImageConstants.hpp"
 
 using namespace std;
 
