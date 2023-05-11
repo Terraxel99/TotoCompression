@@ -94,6 +94,8 @@ void TotoImage::save(string filePath) {
 void TotoImage::show() {
     cv::Mat compressed = this->mergeBlocks();
 
+    TotoWriter::writeImage(compressed, this->blockSize, "./out/temp.toto");
+
     cv::imshow(this->name, compressed);
     cv::waitKey(0);
 }

@@ -6,10 +6,12 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 set(SOURCE_FILES
+    src/main.cpp
+    src/io/TotoReader.cpp
+    src/io/TotoWriter.cpp
     src/image/TotoImage.cpp
     src/image/TotoBlock.cpp
-    src/operations/TotoOperationHandler.cpp
-    src/main.cpp)
+    src/operations/TotoOperationHandler.cpp)
 
 add_executable(TotoCompression ${SOURCE_FILES})
 
