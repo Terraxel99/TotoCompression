@@ -3,6 +3,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "TotoImageConstants.hpp"
+
 using namespace std;
 
 class TotoBlock {
@@ -13,11 +15,6 @@ class TotoBlock {
         cv::Mat data;
 
         bool isColoured();
-
-        void grayDCT();
-        void colourDCT();
-        void grayIDCT();
-        void colourIDCT();
 
     public:
         TotoBlock(cv::Mat baseMat, int xOffset, int yOffset, int blockSize);
@@ -31,6 +28,11 @@ class TotoBlock {
 
         void DCT();
         void IDCT();
+
+        void quantize();
+        void deQuantize();
+
+        void convertTo(int type, double scale = 1.0);
 
         void tempShow();
 };

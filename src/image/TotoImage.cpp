@@ -1,10 +1,7 @@
 #include "TotoImage.hpp"
 
-TotoImage TotoImage::fromFile(const string &filePath) {
-    time_t _tm =time(NULL);
-    struct tm* curtime = localtime(&_tm);
-    
-    return TotoImage(filePath, asctime(curtime));         
+TotoImage TotoImage::fromFile(const string &filePath) {    
+    return TotoImage(filePath, "Compressed image");         
 }
 
 TotoImage TotoImage::fromFile(const string &filePath, const string &name) {
@@ -61,20 +58,30 @@ cv::Mat TotoImage::mergeBlocks() {
 }
 
 void TotoImage::compress() {
-    cout << "Compress image" << endl;
-    
+    cout << "Compressing image" << endl;
+
     for (int i = 0; i < this->totalNbBlocks; i++) {
-        this->getBlockAt(i)->DCT();
+        TotoBlock* currentBlock = this->getBlockAt(i);
+
+        currentBlock->convertTo(CV_64F);
+
+        currentBlock->DCT();
+        currentBlock->quantize();
     }
 
     this->show();
 }
 
 void TotoImage::decompress() {
-    cout << "Decompress image" << endl;
+    cout << "Decompressing image" << endl;
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
-        this->getBlockAt(i)->IDCT();
+        TotoBlock* currentBlock = this->getBlockAt(i);
+
+        currentBlock->deQuantize();
+        currentBlock->IDCT();
+        
+        currentBlock->convertTo(CV_8U);
     }
 
     this->show();
