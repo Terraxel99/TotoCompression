@@ -32,7 +32,7 @@ class TotoBlock {
         void quantize();
         void deQuantize();
 
-        void convertTo(int type, double scale = 1.0);
+        void convertTo(int type, double scale = 1.0, double delta = 0.0);
 
         void tempShow();
 };
