@@ -24,7 +24,7 @@ TotoImage::TotoImage(const string &filePath, const string &name) {
     cout << "CV_32FC1 : " << CV_32FC1 << endl;
     cout << "CV_32FC2 : " << CV_32FC2 << endl;
     cout << "CV_32FC3 : " << CV_32FC3 << endl << endl;
-    
+
     cout << "Base mat : " << this->baseMat.type() << endl;
 
     this->createBlocks();
@@ -114,9 +114,9 @@ void TotoImage::save(string filePath) {
     metadata.width = this->width;*/
 
     cv::Mat compressed = this->mergeBlocks();
+    cout << compressed.type() << endl;
 
-    compressed.convertTo(compressed, CV_8U);
-
+    //compressed.convertTo(compressed, CV_8U);
     //TotoWriter::writeImage(compressed, metadata, "./out/temp.toto");*/
 
     cv::imwrite(filePath, compressed);

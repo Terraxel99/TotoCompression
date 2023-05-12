@@ -9,9 +9,6 @@
 #include "TotoBlock.hpp"
 #include "TotoImageConstants.hpp"
 
-#include "../io/TotoWriter.hpp"
-#include "../io/TotoImageMetadata.hpp"
-
 using namespace std;
 
 class TotoImage {
