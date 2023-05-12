@@ -12,6 +12,7 @@ TotoImage::TotoImage(const string &filePath, const string &name) {
     this->baseMat = cv::imread(filePath, cv::IMREAD_UNCHANGED);
     this->name = name;
 
+    cout << "List of useful OpenCV types (debug purposes) : " << endl;
     cout << "CV_8U : " << CV_8U << endl;
     cout << "CV_8UC1 : " << CV_8UC1 << endl;
     cout << "CV_8UC2 : " << CV_8UC2 << endl;
@@ -25,7 +26,7 @@ TotoImage::TotoImage(const string &filePath, const string &name) {
     cout << "CV_32FC2 : " << CV_32FC2 << endl;
     cout << "CV_32FC3 : " << CV_32FC3 << endl << endl;
 
-    cout << "Base mat : " << this->baseMat.type() << endl;
+    cout << "Base mat type : " << this->baseMat.type() << endl;
 
     this->createBlocks();
 }
@@ -62,6 +63,8 @@ void TotoImage::createBlocks(int blockSize) {
 cv::Mat TotoImage::mergeBlocks() {
     cv::Mat output = cv::Mat(this->baseMat.size().height, this->baseMat.size().width, this->baseMat.type());
 
+    cout << "output : " << output.type() << endl;
+
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* block = this->getBlockAt(i);
         cv::Mat region = output(cv::Rect(block->getBaseImageXOffset(), block->getBaseImageYOffset(), block->getWidth(), block->getHeight()));
@@ -78,7 +81,7 @@ void TotoImage::compress() {
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
-        currentBlock->convertTo(CV_64F);
+        currentBlock->convertTo(CV_32F);
 
         currentBlock->DCT();
         currentBlock->quantize();
@@ -95,7 +98,7 @@ void TotoImage::decompress() {
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
-        currentBlock->convertTo(CV_64F);
+        currentBlock->convertTo(CV_32F);
 
         currentBlock->deQuantize();
         currentBlock->IDCT();
@@ -107,17 +110,8 @@ void TotoImage::decompress() {
 }
 
 void TotoImage::save(string filePath) {
-
-    /*TotoImageMetadata metadata;
-    metadata.blockSize = this->blockSize;
-    metadata.height = this->height;
-    metadata.width = this->width;*/
-
     cv::Mat compressed = this->mergeBlocks();
     cout << compressed.type() << endl;
-
-    //compressed.convertTo(compressed, CV_8U);
-    //TotoWriter::writeImage(compressed, metadata, "./out/temp.toto");*/
 
     cv::imwrite(filePath, compressed);
 }
