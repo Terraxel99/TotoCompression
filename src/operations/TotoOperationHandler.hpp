@@ -7,7 +7,6 @@ class TotoOperationHandler {
     
     private:
         TotoOperation operation;
-        void printProgramUsage();
         void askUserForFlow();
 
     public:

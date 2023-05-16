@@ -11,13 +11,18 @@ TotoImage TotoImage::fromFile(const string &filePath, const string &name, bool i
 
 TotoImage::TotoImage(const string &filePath, const string &name, bool isCompressed) {
     this->baseMat = cv::imread(filePath, cv::IMREAD_UNCHANGED);
+    this->name = name;
 
     double conversionScale = isCompressed ? (1.0 / 255.0) : 1.0;
     this->baseMat.convertTo(this->baseMat, CV_64F, conversionScale);
-    
-    this->name = name;
 
     this->createBlocks();
+
+    this->view = new TotoConsoleOutput();
+}
+
+TotoImage::~TotoImage() {
+    delete this->view;
 }
 
 inline TotoBlock* TotoImage::getBlockAt(int x, int y) {
@@ -63,28 +68,35 @@ cv::Mat TotoImage::mergeBlocks() {
 }
 
 void TotoImage::compress() {
-    cout << "Compressing image" << endl;
+    this->view->imageCompressing();
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
+        int progressPercentage = ((i + 1) / (float)this->totalNbBlocks) * 100;
+        this->view->progressBar(progressPercentage);
         TotoBlock* currentBlock = this->getBlockAt(i);
 
         currentBlock->DCT();
         currentBlock->quantize();
     }
 
+    this->view->imageCompressionEnded();
     this->show();
 }
 
 void TotoImage::decompress() {
-    cout << "Decompressing image" << endl;
+    this->view->imageDecompressing();
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
+        int progressPercentage = ((i + 1) / (float)this->totalNbBlocks) * 100;
+        this->view->progressBar(progressPercentage);
+
         TotoBlock* currentBlock = this->getBlockAt(i);
 
         currentBlock->deQuantize();
         currentBlock->IDCT();
     }
 
+    this->view->imageDecompressionEnded();
     this->show();
 }
 
