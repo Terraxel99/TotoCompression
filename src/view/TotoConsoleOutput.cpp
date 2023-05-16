@@ -1,30 +1,30 @@
 #include "TotoConsoleOutput.hpp"
 
 void TotoConsoleOutput::welcomeMessage() {
-    cout << "Welcome to Toto's compression" << endl;
+    cout << "\033[1;36mWelcome to Toto's compression !\033[0m" << endl << endl;
 }
 
 void TotoConsoleOutput::programUsage() {
-    cout << "Program usage :" << endl;
+    cout << "\033[31mProgram usage :" << endl;
     cout << "\t--help\t\t\t: To get help about the program" << endl;
     cout << "\t--compress {input_path} [-o {output_path}]\t: To compress the image at {input_path} and save to {output_path} (optional)." << endl;
-    cout << "\t--decompress {input_path} [-o {output_path}]\t: To decompress the image at {input_path} and save to {output_path} (optional)." << endl;
+    cout << "\t--decompress {input_path} [-o {output_path}]\t: To decompress the image at {input_path} and save to {output_path} (optional).\033[0m" << endl;
 }
 
 void TotoConsoleOutput::imageCompressing() {
-    cout << "Compressing image" << endl;
+    cout << "\033[36mStarting image compression\033[0m" << endl;
 }
 
 void TotoConsoleOutput::imageDecompressing() {
-    cout << "Decompressing image" << endl;
+    cout << "\033[36mStarting image decompression\033[0m" << endl;
 }
 
 void TotoConsoleOutput::imageCompressionEnded() {
-    cout << "Image has been successfully compressed" << endl;
+    cout << "\033[32mImage has been successfully compressed\033[0m" << endl;
 }
 
 void TotoConsoleOutput::imageDecompressionEnded() {
-    cout << "Image has been successfully decompressed" << endl;
+    cout << "\033[32mImage has been successfully decompressed\033[0m" << endl;
 }
 
 void TotoConsoleOutput::progressBar(int percentage) {
@@ -46,7 +46,7 @@ void TotoConsoleOutput::progressBar(int percentage) {
         cout << " ";
     }
 
-    cout << "\033[1;37]]\033[0m " << percentage << " %\r";
+    cout << "\033[1;37m] " << percentage << " %\033[0m\r";
 
     if (percentage == 100) {
         cout << endl;

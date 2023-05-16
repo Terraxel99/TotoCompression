@@ -2,12 +2,19 @@
 
 TotoOperationHandler::TotoOperationHandler(TotoOperation operation) {
     this->operation = operation;
+
+    this->view = new TotoConsoleOutput();
+    this->view->welcomeMessage();
+}
+
+TotoOperationHandler::~TotoOperationHandler() {
+    delete this->view;
 }
 
 void TotoOperationHandler::execute() {
     
     if (this->operation.type == TotoOperationType::PrintHelp) {
-        //this->printProgramUsage(); // TODO : refer to a view
+        this->view->programUsage();
         return;
     }
 
@@ -26,12 +33,12 @@ void TotoOperationHandler::execute() {
 
         default:
             cerr << "Unknown operation. Please review arguments." << endl << endl;
-            //this->printProgramUsage(); // TODO : refer to a view
+            this->view->programUsage();
             return;
     }
 
     if (this->operation.outputPath == nullptr) {        
-        image.save("Some path");
+        image.save("Some path"); // TODO : Default path
     } else {
         image.save(this->operation.outputPath);
     }
