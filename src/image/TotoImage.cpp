@@ -69,7 +69,7 @@ void TotoImage::compress() {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
         currentBlock->DCT();
-        //currentBlock->quantize();
+        currentBlock->quantize();
     }
 
     this->show();
@@ -81,7 +81,7 @@ void TotoImage::decompress() {
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
-        //currentBlock->deQuantize();
+        currentBlock->deQuantize();
         currentBlock->IDCT();
     }
 
