@@ -2,19 +2,19 @@
 
 TotoOperationHandler::TotoOperationHandler(TotoOperation operation) {
     this->operation = operation;
+
+    this->view = new TotoConsoleOutput();
+    this->view->welcomeMessage();
 }
 
-void TotoOperationHandler::printProgramUsage() {
-    cout << "Program usage :" << endl;
-    cout << "\t--help\t\t\t: To get help about the program" << endl;
-    cout << "\t--compress {input_path} [-o {output_path}]\t: To compress the image at {input_path} and save to {output_path} (optional)." << endl;
-    cout << "\t--decompress {input_path} [-o {output_path}]\t: To decompress the image at {input_path} and save to {output_path} (optional)." << endl;
+TotoOperationHandler::~TotoOperationHandler() {
+    delete this->view;
 }
 
 void TotoOperationHandler::execute() {
     
     if (this->operation.type == TotoOperationType::PrintHelp) {
-        this->printProgramUsage();
+        this->view->programUsage();
         return;
     }
 
@@ -33,12 +33,12 @@ void TotoOperationHandler::execute() {
 
         default:
             cerr << "Unknown operation. Please review arguments." << endl << endl;
-            this->printProgramUsage();
+            this->view->programUsage();
             return;
     }
 
     if (this->operation.outputPath == nullptr) {        
-        image.save("Some path");
+        image.save("Some path"); // TODO : Default path
     } else {
         image.save(this->operation.outputPath);
     }

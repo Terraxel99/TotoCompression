@@ -6,12 +6,14 @@
 class TotoOperationHandler {
     
     private:
+        ITotoOutput* view;
+
         TotoOperation operation;
-        void printProgramUsage();
         void askUserForFlow();
 
     public:
         TotoOperationHandler(TotoOperation operation);
+        ~TotoOperationHandler();
 
         void execute();
 };

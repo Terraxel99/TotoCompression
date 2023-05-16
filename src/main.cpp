@@ -10,18 +10,12 @@ using namespace std;
 TotoOperation createOperationFromArguments(int argc, char** argv);
 
 int main(int argc, char** argv) {
-    cout << "Welcome to Toto's compression tool" << endl << endl;
-
     TotoOperation operation = createOperationFromArguments(argc, argv);
     
     TotoOperationHandler(operation)
         .execute();
 
     return 0;
-
-    
-    //TotoImage img = TotoImage::fromFile("./data/colour/monarch.tif");
-    // TotoImage img = TotoImage::fromFile("./data/colour/clegg.tif");    
 }
 
 // TODO : What if no arguments ? -> ask for operation todo

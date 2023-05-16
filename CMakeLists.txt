@@ -9,7 +9,8 @@ set(SOURCE_FILES
     src/main.cpp
     src/image/TotoImage.cpp
     src/image/TotoBlock.cpp
-    src/operations/TotoOperationHandler.cpp)
+    src/operations/TotoOperationHandler.cpp
+    src/view/TotoConsoleOutput.cpp)
 
 add_executable(TotoCompression ${SOURCE_FILES})
 

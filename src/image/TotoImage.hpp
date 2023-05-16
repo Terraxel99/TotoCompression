@@ -9,6 +9,8 @@
 #include "TotoBlock.hpp"
 #include "TotoImageConstants.hpp"
 
+#include "../view/TotoConsoleOutput.hpp"
+
 using namespace std;
 
 class TotoImage {
@@ -16,6 +18,8 @@ class TotoImage {
     private:
         string name;
         cv::Mat baseMat;
+
+        ITotoOutput* view;
 
         vector<TotoBlock> blocks;
         int nbBlocksHorizontal, nbBlocksVertical, blockSize, totalNbBlocks;
@@ -40,4 +44,6 @@ class TotoImage {
         void decompress();
 
         int getNbBlocks();
+
+        ~TotoImage();
 };
