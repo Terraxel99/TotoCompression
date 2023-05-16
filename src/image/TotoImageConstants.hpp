@@ -2,7 +2,7 @@
 
 #define DEFAULT_BLOCKSIZE 8
 
-const cv::Mat quantizationMatrix = (cv::Mat_<float>(8, 8) << 
+const cv::Mat quantizationMatrix = (cv::Mat_<double>(8, 8) << 
     16, 11, 10, 16, 24, 40, 51, 61,
     12, 12, 14, 19, 26, 58, 60, 55,
     14, 13, 16, 24, 40, 57, 69, 56,

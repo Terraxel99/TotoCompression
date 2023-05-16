@@ -1,32 +1,21 @@
 #include "TotoImage.hpp"
 
-TotoImage TotoImage::fromFile(const string &filePath) {    
-    return TotoImage(filePath, "Compressed image");         
+TotoImage TotoImage::fromFile(const string &filePath, bool isCompressed) {    
+    string name = "TotoImage"; 
+    return TotoImage(filePath, name, isCompressed);         
 }
 
-TotoImage TotoImage::fromFile(const string &filePath, const string &name) {
-    return TotoImage(filePath, name);
+TotoImage TotoImage::fromFile(const string &filePath, const string &name, bool isCompressed) {
+    return TotoImage(filePath, name, isCompressed);
 }
 
-TotoImage::TotoImage(const string &filePath, const string &name) {
+TotoImage::TotoImage(const string &filePath, const string &name, bool isCompressed) {
     this->baseMat = cv::imread(filePath, cv::IMREAD_UNCHANGED);
+
+    double conversionScale = isCompressed ? (1.0 / 255.0) : 1.0;
+    this->baseMat.convertTo(this->baseMat, CV_64F, conversionScale);
+    
     this->name = name;
-
-    cout << "List of useful OpenCV types (debug purposes) : " << endl;
-    cout << "CV_8U : " << CV_8U << endl;
-    cout << "CV_8UC1 : " << CV_8UC1 << endl;
-    cout << "CV_8UC2 : " << CV_8UC2 << endl;
-    cout << "CV_8UC3 : " << CV_8UC3 << endl;
-    cout << "CV_64F : " << CV_64F << endl;
-    cout << "CV_64FC1 : " << CV_64FC1 << endl;
-    cout << "CV_64FC2 : " << CV_64FC2 << endl;
-    cout << "CV_64FC3 : " << CV_64FC3 << endl;
-    cout << "CV_32F : " << CV_32F << endl;
-    cout << "CV_32FC1 : " << CV_32FC1 << endl;
-    cout << "CV_32FC2 : " << CV_32FC2 << endl;
-    cout << "CV_32FC3 : " << CV_32FC3 << endl << endl;
-
-    cout << "Base mat type : " << this->baseMat.type() << endl;
 
     this->createBlocks();
 }
@@ -63,8 +52,6 @@ void TotoImage::createBlocks(int blockSize) {
 cv::Mat TotoImage::mergeBlocks() {
     cv::Mat output = cv::Mat(this->baseMat.size().height, this->baseMat.size().width, this->baseMat.type());
 
-    cout << "output : " << output.type() << endl;
-
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* block = this->getBlockAt(i);
         cv::Mat region = output(cv::Rect(block->getBaseImageXOffset(), block->getBaseImageYOffset(), block->getWidth(), block->getHeight()));
@@ -81,12 +68,8 @@ void TotoImage::compress() {
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
-        currentBlock->convertTo(CV_32F);
-
         currentBlock->DCT();
-        currentBlock->quantize();
-
-        currentBlock->convertTo(CV_8U);
+        //currentBlock->quantize();
     }
 
     this->show();
@@ -98,12 +81,8 @@ void TotoImage::decompress() {
     for (int i = 0; i < this->totalNbBlocks; i++) {
         TotoBlock* currentBlock = this->getBlockAt(i);
 
-        currentBlock->convertTo(CV_32F);
-
-        currentBlock->deQuantize();
+        //currentBlock->deQuantize();
         currentBlock->IDCT();
-
-        currentBlock->convertTo(CV_8U);
     }
 
     this->show();
@@ -111,7 +90,6 @@ void TotoImage::decompress() {
 
 void TotoImage::save(string filePath) {
     cv::Mat compressed = this->mergeBlocks();
-    cout << compressed.type() << endl;
 
     cv::imwrite(filePath, compressed);
 }
