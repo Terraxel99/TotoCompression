@@ -18,7 +18,8 @@ void TotoOperationHandler::execute() {
         return;
     }
 
-    TotoImage image = TotoImage::fromFile(this->operation.inputPath);
+    bool isBaseImageCompressed = this->operation.type == TotoOperationType::Decompress;
+    TotoImage image = TotoImage::fromFile(this->operation.inputPath, isBaseImageCompressed);
 
     switch (this->operation.type) {
 

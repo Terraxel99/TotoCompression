@@ -21,13 +21,14 @@ class TotoImage {
         int nbBlocksHorizontal, nbBlocksVertical, blockSize, totalNbBlocks;
         int width, height;
 
-        TotoImage(const string &filePath, const string &name);
+        TotoImage(const string &filePath, const string &name, bool isCompressed = false);
+
         void createBlocks(int blockSize = DEFAULT_BLOCKSIZE);
         cv::Mat mergeBlocks();
 
     public:
-        static TotoImage fromFile(const string &filePath);
-        static TotoImage fromFile(const string &filePath, const string &name);
+        static TotoImage fromFile(const string &filePath, bool isCompressed);
+        static TotoImage fromFile(const string &filePath, const string &name, bool isCompressed);
 
         inline TotoBlock* getBlockAt(int x, int y);
         inline TotoBlock* getBlockAt(int position);

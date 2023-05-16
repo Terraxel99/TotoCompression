@@ -42,8 +42,8 @@ bool TotoBlock::isColoured() {
     return !(this->data.empty()) && this->data.channels() == 3;
 }
 
-void TotoBlock::convertTo(int type, double scale) {
-    this->data.convertTo(this->data, type, scale);
+void TotoBlock::convertTo(int type, double scale, double delta) {
+    this->data.convertTo(this->data, type, scale, delta);
 }
 
 void TotoBlock::DCT() {
@@ -73,11 +73,7 @@ void TotoBlock::quantize() {
     cv::split(this->data, channels);
 
     for (int channel = 0; channel < channels.size(); channel++) {
-        for (int x = 0; x < this->width; x++) {
-            for (int y = 0; y < this->height; y++) {
-                channels[channel].at<float>(y, x) /= quantizationTable[y][x];                
-            }
-        }
+        cv::divide(channels[channel], quantizationMatrix, channels[channel]);
     }
 
     cv::merge(channels, this->data);
@@ -88,11 +84,7 @@ void TotoBlock::deQuantize() {
     cv::split(this->data, channels);
 
     for (int channel = 0; channel < channels.size(); channel++) {
-        for (int x = 0; x < this->width; x++) {
-            for (int y = 0; y < this->height; y++) {
-                channels[channel].at<float>(y, x) *= quantizationTable[y][x];                
-            }
-        }
+        cv::multiply(channels[channel], quantizationMatrix, channels[channel]);
     }
 
     cv::merge(channels, this->data);
