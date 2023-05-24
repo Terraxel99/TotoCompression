@@ -11,8 +11,25 @@ TotoImage TotoImage::fromFile(const string &filePath, const string &name, bool i
     return TotoImage(filePath, name, isCompressed);
 }
 
+TotoImage TotoImage::fromMat(const cv::Mat &mat, const string &name, bool isCompressed) {
+    return TotoImage(mat, name, isCompressed);
+}
+
 TotoImage::TotoImage(const string &filePath, const string &name, bool isCompressed) {
     this->baseMat = cv::imread(filePath, cv::IMREAD_UNCHANGED);
+    this->initialize(name, isCompressed);
+}
+
+TotoImage::TotoImage(const cv::Mat &mat, const string &name, bool isCompressed) {
+    this->baseMat = mat;
+    this->initialize(name, isCompressed);
+}
+
+TotoImage::~TotoImage() {
+    delete this->view;
+}
+
+void TotoImage::initialize(const string &name, bool isCompressed) {
     this->name = name;
 
     double conversionScale = isCompressed ? (1.0 / 255.0) : 1.0;
@@ -21,10 +38,6 @@ TotoImage::TotoImage(const string &filePath, const string &name, bool isCompress
     this->createBlocks();
 
     this->view = new TotoConsoleOutput();
-}
-
-TotoImage::~TotoImage() {
-    delete this->view;
 }
 
 inline TotoBlock* TotoImage::getBlockAt(int x, int y) {
