@@ -17,6 +17,8 @@ class TotoConsoleOutput : public ITotoOutput {
         void imageCompressing();
         void imageDecompressing();
 
+        void displayPSNR(float psnr);
+
         void progressBar(int percentage);
 
         void imageCompressionEnded();

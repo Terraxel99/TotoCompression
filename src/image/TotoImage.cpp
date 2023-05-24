@@ -1,5 +1,7 @@
 #include "TotoImage.hpp"
 
+double getPSNR(const cv::Mat& I1, const cv::Mat& I2);
+
 TotoImage TotoImage::fromFile(const string &filePath, bool isCompressed) {    
     string name = "TotoImage"; 
     return TotoImage(filePath, name, isCompressed);         

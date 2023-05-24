@@ -11,14 +11,20 @@ TotoOperation createOperationFromArguments(int argc, char** argv);
 
 int main(int argc, char** argv) {
     TotoOperation operation = createOperationFromArguments(argc, argv);
-    
-    TotoOperationHandler(operation)
-        .execute();
+
+    try {
+        TotoOperationHandler(operation)
+            .execute();
+    } catch (std::exception& e) {
+        cerr << "An error occured : " << endl << endl << e.what() << endl << endl;
+        cerr << "Terminating" << endl;
+
+        return 1;
+    }
 
     return 0;
 }
 
-// TODO : What if no arguments ? -> ask for operation todo
 TotoOperation createOperationFromArguments(int argc, char** argv) {
     TotoOperation operation;
 
@@ -27,34 +33,26 @@ TotoOperation createOperationFromArguments(int argc, char** argv) {
         return operation;
     }
 
-    if (argc == 2) {
-        if (strcmp(argv[1], "--help") == 0) {
-            operation.type = TotoOperationType::PrintHelp;
-        } else {
-            throw runtime_error("Unknown command.");
-        }
-
-        return operation;
+    if (strcmp(argv[1], "--help") == 0) {
+        operation.type = TotoOperationType::PrintHelp;
     }
-
-    operation.inputPath = argv[2];
 
     if (strcmp(argv[1], "--compress") == 0) {
         operation.type = TotoOperationType::Compress;
-    } else if (strcmp(argv[1], "--decompress") == 0) {
+        operation.inputPath = argv[2];
+        operation.outputPath = argv[3];
+    }
+
+    if (strcmp(argv[1], "--decompress") == 0) {
         operation.type = TotoOperationType::Decompress;
-    } else {
-        throw runtime_error("Unknown command.");
+        operation.inputPath = argv[2];
+        operation.outputPath = argv[3];
     }
 
-    if (argc != 5) {
-        return operation;
-    }
-
-    if (strcmp(argv[3], "-o") == 0) {
-        operation.outputPath = argv[4];
-    } else {
-        throw runtime_error("Unknown command.");
+    if (strcmp(argv[1], "--psnr") == 0) {
+        operation.type = TotoOperationType::PSNR;
+        operation.inputPath = argv[2];
+        operation.outputPath = argv[3];
     }
 
     return operation;

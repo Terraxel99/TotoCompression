@@ -20,11 +20,15 @@ void TotoConsoleOutput::imageDecompressing() {
 }
 
 void TotoConsoleOutput::imageCompressionEnded() {
-    cout << "\033[32mImage has been successfully compressed\033[0m" << endl;
+    cout << "\033[32mImage has been successfully compressed\033[0m" << endl << endl;
 }
 
 void TotoConsoleOutput::imageDecompressionEnded() {
-    cout << "\033[32mImage has been successfully decompressed\033[0m" << endl;
+    cout << "\033[32mImage has been successfully decompressed\033[0m" << endl << endl;
+}
+
+void TotoConsoleOutput::displayPSNR(float psnr) {
+    cout << "The PSNR is " << psnr << " dB" << endl;
 }
 
 void TotoConsoleOutput::progressBar(int percentage) {

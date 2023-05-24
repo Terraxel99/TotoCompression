@@ -2,6 +2,9 @@
 
 #include "TotoOperation.hpp"
 #include "../image/TotoImage.hpp"
+#include "../image/TotoCompressionMeasure.hpp"
+
+using namespace std;
 
 class TotoOperationHandler {
     
@@ -9,7 +12,11 @@ class TotoOperationHandler {
         ITotoOutput* view;
 
         TotoOperation operation;
-        void askUserForFlow();
+
+        void executeCompressionOperation();
+        void executeDecompressionOperation();
+        void executePSNROperation();
+        void executePrintHelpOperation();
 
     public:
         TotoOperationHandler(TotoOperation operation);
