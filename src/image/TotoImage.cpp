@@ -33,7 +33,7 @@ void TotoImage::initialize(const string &name, bool isCompressed) {
     this->name = name;
 
     double conversionScale = isCompressed ? (1.0 / 255.0) : 1.0;
-    this->baseMat.convertTo(this->baseMat, CV_64F, conversionScale);
+    this->baseMat.convertTo(this->baseMat, CV_32F, conversionScale);
 
     this->createBlocks();
 
@@ -82,28 +82,39 @@ cv::Mat TotoImage::mergeBlocks() {
     return output;
 }
 
-void TotoImage::compress() {
-    this->view->imageCompressing();
+void TotoImage::compress(bool verbose) {
+    if (verbose) {
+        this->view->imageCompressing();
+    }
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
-        int progressPercentage = ((i + 1) / (float)this->totalNbBlocks) * 100;
-        this->view->progressBar(progressPercentage);
+        if (verbose) {
+            int progressPercentage = ((i + 1) / (float)this->totalNbBlocks) * 100;
+            this->view->progressBar(progressPercentage);
+        }
+
         TotoBlock* currentBlock = this->getBlockAt(i);
 
         currentBlock->DCT();
         currentBlock->quantize();
     }
 
-    this->view->imageCompressionEnded();
-    this->show();
+    if (verbose) {
+        this->view->imageCompressionEnded();
+        this->show();
+    }
 }
 
-void TotoImage::decompress() {
-    this->view->imageDecompressing();
+void TotoImage::decompress(bool verbose) {
+    if (verbose) {
+        this->view->imageDecompressing();
+    }
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
-        int progressPercentage = ((i + 1) / (float)this->totalNbBlocks) * 100;
-        this->view->progressBar(progressPercentage);
+        if (verbose) {
+            int progressPercentage = ((i + 1) / (float)this->totalNbBlocks) * 100;
+            this->view->progressBar(progressPercentage);
+        }
 
         TotoBlock* currentBlock = this->getBlockAt(i);
 
@@ -111,8 +122,10 @@ void TotoImage::decompress() {
         currentBlock->IDCT();
     }
 
-    this->view->imageDecompressionEnded();
-    this->show();
+    if (verbose) {
+        this->view->imageDecompressionEnded();
+        this->show();
+    }
 }
 
 void TotoImage::save(string filePath) {

@@ -8,6 +8,7 @@ using namespace std;
 
 
 TotoOperation createOperationFromArguments(int argc, char** argv);
+TotoFileContent getContentTypeFromArgument(char* arg);
 
 int main(int argc, char** argv) {
     TotoOperation operation = createOperationFromArguments(argc, argv);
@@ -39,14 +40,16 @@ TotoOperation createOperationFromArguments(int argc, char** argv) {
 
     if (strcmp(argv[1], "--compress") == 0) {
         operation.type = TotoOperationType::Compress;
-        operation.inputPath = argv[2];
-        operation.outputPath = argv[3];
+        operation.contentType = getContentTypeFromArgument(argv[2]);
+        operation.inputPath = argv[3];
+        operation.outputPath = argv[4];
     }
 
     if (strcmp(argv[1], "--decompress") == 0) {
         operation.type = TotoOperationType::Decompress;
-        operation.inputPath = argv[2];
-        operation.outputPath = argv[3];
+        operation.contentType = getContentTypeFromArgument(argv[2]);
+        operation.inputPath = argv[3];
+        operation.outputPath = argv[4];
     }
 
     if (strcmp(argv[1], "--psnr") == 0) {
@@ -56,4 +59,16 @@ TotoOperation createOperationFromArguments(int argc, char** argv) {
     }
 
     return operation;
+}
+
+TotoFileContent getContentTypeFromArgument(char* arg) {
+    if (strcmp(arg, "--image") == 0) {
+        return TotoFileContent::Image;
+    }
+
+    if (strcmp(arg, "--video") == 0) {
+        return TotoFileContent::IFrameOnlyVideo;
+    }
+
+    return TotoFileContent::Unknown;
 }

@@ -10,6 +10,7 @@ set(SOURCE_FILES
     src/image/TotoImage.cpp
     src/image/TotoBlock.cpp
     src/image/TotoCompressionMeasure.cpp
+    src/video/TotoIVideo.cpp
     src/operations/TotoOperationHandler.cpp
     src/view/TotoConsoleOutput.cpp)
 

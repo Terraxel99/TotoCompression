@@ -12,21 +12,63 @@ TotoOperationHandler::~TotoOperationHandler() {
 }
 
 void TotoOperationHandler::executeCompressionOperation() {
-    bool isBaseImageCompressed = this->operation.type == TotoOperationType::Decompress;
-    TotoImage image = TotoImage::fromFile(this->operation.inputPath, isBaseImageCompressed);
+    switch (this->operation.contentType) {
+        case TotoFileContent::Image:
+            this->executeImageCompressionOperation();
+            break;
+        
+        case TotoFileContent::IFrameOnlyVideo:
+            this->executeIFrameOnlyVideoCompressionOperation();
+            break;
 
-    image.compress();
+        case TotoFileContent::Unknown:
+        default:
+            throw runtime_error("Unsupported");
+            break;
+    }
+}
+
+void TotoOperationHandler::executeImageCompressionOperation() {
+    TotoImage image = TotoImage::fromFile(this->operation.inputPath, false);
+
+    image.compress(true);
 
     image.save(this->operation.outputPath);
 }
 
-void TotoOperationHandler::executeDecompressionOperation() {
-    bool isBaseImageCompressed = this->operation.type == TotoOperationType::Decompress;
-    TotoImage image = TotoImage::fromFile(this->operation.inputPath, isBaseImageCompressed);
+void TotoOperationHandler::executeIFrameOnlyVideoCompressionOperation() {
+    TotoIVideo video = TotoIVideo::fromFile(this->operation.inputPath);
+    video.compressAndSave(this->operation.outputPath);
+}
 
-    image.decompress();
+void TotoOperationHandler::executeDecompressionOperation() {
+    switch (this->operation.contentType) {
+        case TotoFileContent::Image:
+            this->executeImageDecompressionOperation();
+            break;
+        
+        case TotoFileContent::IFrameOnlyVideo:
+            this->executeIFrameOnlyVideoDecompressionOperation();
+            break;
+
+        case TotoFileContent::Unknown:
+        default:
+            throw runtime_error("Unsupported");
+            break;
+    }
+}
+
+void TotoOperationHandler::executeImageDecompressionOperation() {
+    TotoImage image = TotoImage::fromFile(this->operation.inputPath, true);
+
+    image.decompress(true);
 
     image.save(this->operation.outputPath);
+}
+
+void TotoOperationHandler::executeIFrameOnlyVideoDecompressionOperation() {
+    TotoIVideo video = TotoIVideo::fromFile(this->operation.inputPath);
+    video.decompressAndSave(this->operation.outputPath);
 }
 
 void TotoOperationHandler::executePSNROperation() {

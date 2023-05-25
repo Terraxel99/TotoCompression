@@ -1,6 +1,6 @@
 #pragma once
 
-enum TotoOperationType {
+enum class TotoOperationType {
     Unknown = 0,
     Compress = 1,
     Decompress = 2,

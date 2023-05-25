@@ -31,7 +31,6 @@ class TotoImage {
         void initialize(const string &name, bool isCompressed);
 
         void createBlocks(int blockSize = DEFAULT_BLOCKSIZE);
-        cv::Mat mergeBlocks();
 
     public:
         static TotoImage fromFile(const string &filePath, bool isCompressed);
@@ -44,8 +43,10 @@ class TotoImage {
         void save(string filePath);
         void show();
         
-        void compress();
-        void decompress();
+        void compress(bool verbose = false);
+        void decompress(bool verbose = false);
+
+        cv::Mat mergeBlocks();
 
         int getNbBlocks();
 
