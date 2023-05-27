@@ -27,9 +27,10 @@ void TotoIVideo::compressAndSave(const string &outputPath) {
     cv::setWindowProperty("Video", cv::WND_PROP_TOPMOST, 1);
 
     int frameDelay = 1000 / this->fps; // Time (in ms) between frames to meet expected framerate.
-    cv::Size size(this->frameWidth, this->frameHeight);
+    int fourcc = cv::VideoWriter::fourcc('X', '2', '6', '4');
+    cv::Size size(this->frameWidth, this->frameHeight);              
 
-    cv::VideoWriter writer(outputPath + ".avi", cv::VideoWriter::fourcc('X', 'V', 'I', 'D'), this->fps, size, this->isColoured);
+    cv::VideoWriter writer(outputPath + ".avi", fourcc, this->fps, size, this->isColoured);
 
     for (int frameNb = 0; frameNb < this->frameCount; frameNb++) {
         cv::Mat currentFrame;
@@ -43,12 +44,15 @@ void TotoIVideo::compressAndSave(const string &outputPath) {
 
         img.compress();
         cv::Mat result = img.mergeBlocks();
-        result.convertTo(result, CV_16U);
 
         writer.write(result);
 
         cv::imshow("Video", result);
-        cv::waitKey(frameDelay);
+        int keycode = cv::waitKey(frameDelay);
+
+        if (keycode == 27) {
+            break;
+        }
     }
 
     cv::waitKey(0); 
@@ -77,13 +81,15 @@ void TotoIVideo::decompressAndSave(const string &outputPath) {
 
         img.decompress();
         cv::Mat result = img.mergeBlocks();
-        result.convertTo(result, CV_16U);
-        
+
         writer.write(result);
 
-
         cv::imshow("Video", result);
-        cv::waitKey(frameDelay);
+        int keycode = cv::waitKey(frameDelay);
+
+        if (keycode == 27) {
+            break;
+        }
     }
 
     cv::waitKey(0);
