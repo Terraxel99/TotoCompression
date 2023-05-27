@@ -17,6 +17,8 @@ class TotoImage {
 
     private:
         string name;
+
+        cv::Mat original;
         cv::Mat baseMat;
 
         ITotoOutput* view;
@@ -42,6 +44,8 @@ class TotoImage {
 
         void save(string filePath);
         void show();
+
+        cv::Mat getOriginalImage();
         
         void compress(bool verbose = false);
         void decompress(bool verbose = false);

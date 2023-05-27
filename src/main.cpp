@@ -1,74 +1,61 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "./operations/TotoOperation.hpp"
-#include "./operations/TotoOperationHandler.hpp"
+#include "image/TotoImage.hpp"
 
 using namespace std;
 
-
-TotoOperation createOperationFromArguments(int argc, char** argv);
-TotoFileContent getContentTypeFromArgument(char* arg);
+void benchmarkImage(const string &path);
+void benchmarkIVideo(const string &path);
+void benchmarkDVideo(const string &path);
 
 int main(int argc, char** argv) {
-    TotoOperation operation = createOperationFromArguments(argc, argv);
-
-    try {
-        TotoOperationHandler(operation)
-            .execute();
-    } catch (std::exception& e) {
-        cerr << "An error occured : " << endl << endl << e.what() << endl << endl;
-        cerr << "Terminating" << endl;
-
-        return 1;
+    
+    if (strcmp("--image", argv[1]) == 0) {
+        benchmarkImage("./data/grayscale 256/bird.tif");
+        benchmarkImage("./data/colour/monarch.tif");
+        return 0;
     }
 
-    return 0;
+    if (strcmp("--Ivideo", argv[1]) == 0) {
+        benchmarkIVideo("./data/grayscale 256/bird.tif");
+        return 0;
+    }
+
+    if (strcmp("--Dvideo", argv[1]) == 0) {
+        benchmarkDVideo("./data/grayscale 256/bird.tif");
+        return 0;
+    }
+
+    return -1;
 }
 
-TotoOperation createOperationFromArguments(int argc, char** argv) {
-    TotoOperation operation;
+void benchmarkImage(const string &path) {
+    TotoImage img = TotoImage::fromFile(path, false);
 
-    if (argc == 1) {
-        operation.type = TotoOperationType::PrintHelp;
-        return operation;
-    }
+    cv::Mat original = img.getOriginalImage();
+    cv::imshow("Original", original);
 
-    if (strcmp(argv[1], "--help") == 0) {
-        operation.type = TotoOperationType::PrintHelp;
-    }
+    cout << original.type() << endl;
 
-    if (strcmp(argv[1], "--compress") == 0) {
-        operation.type = TotoOperationType::Compress;
-        operation.contentType = getContentTypeFromArgument(argv[2]);
-        operation.inputPath = argv[3];
-        operation.outputPath = argv[4];
-    }
+    img.compress();
+    cv::Mat compressed = img.mergeBlocks();
+    cv::imshow("Compressed", compressed);
 
-    if (strcmp(argv[1], "--decompress") == 0) {
-        operation.type = TotoOperationType::Decompress;
-        operation.contentType = getContentTypeFromArgument(argv[2]);
-        operation.inputPath = argv[3];
-        operation.outputPath = argv[4];
-    }
+    img.decompress();
+    cv::Mat decompressed = img.mergeBlocks();
+    decompressed.convertTo(decompressed, CV_8U);
+    cv::imshow("Decompressed", decompressed);
 
-    if (strcmp(argv[1], "--psnr") == 0) {
-        operation.type = TotoOperationType::PSNR;
-        operation.inputPath = argv[2];
-        operation.outputPath = argv[3];
-    }
+    cout << cv::PSNR(original, decompressed, 255.0) << endl;
 
-    return operation;
+    cv::waitKey(0);
 }
 
-TotoFileContent getContentTypeFromArgument(char* arg) {
-    if (strcmp(arg, "--image") == 0) {
-        return TotoFileContent::Image;
-    }
+void benchmarkIVideo(const string &path) {
 
-    if (strcmp(arg, "--video") == 0) {
-        return TotoFileContent::IFrameOnlyVideo;
-    }
+}
 
-    return TotoFileContent::Unknown;
+void benchmarkDVideo(const string &path) {
+
 }

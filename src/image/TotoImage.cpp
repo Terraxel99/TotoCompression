@@ -32,8 +32,8 @@ TotoImage::~TotoImage() {
 void TotoImage::initialize(const string &name, bool isCompressed) {
     this->name = name;
 
-    double conversionScale = isCompressed ? (1.0 / 255.0) : 1.0;
-    this->baseMat.convertTo(this->baseMat, CV_32F, conversionScale);
+    baseMat.copyTo(this->original);
+    this->baseMat.convertTo(this->baseMat, CV_32F);
 
     this->createBlocks();
 
@@ -67,6 +67,10 @@ void TotoImage::createBlocks(int blockSize) {
             this->blocks.push_back(TotoBlock(this->baseMat, xOffset, yOffset, blockSize));
         }
     }
+}
+
+cv::Mat TotoImage::getOriginalImage() {
+    return this->original;
 }
 
 cv::Mat TotoImage::mergeBlocks() {
