@@ -1,13 +1,13 @@
-#include "TotoIVideo.hpp"
+#include "TotoBVideo.hpp"
 
-TotoIVideo TotoIVideo::fromFile(const string &filePath) {
-    return TotoIVideo(filePath);
+TotoBVideo TotoBVideo::fromFile(const string &filePath) {
+    return TotoBVideo(filePath);
 }
 
-TotoIVideo::TotoIVideo(const string &filePath)
+TotoBVideo::TotoBVideo(const string &filePath)
     : TotoVideo(filePath) { }
 
-void TotoIVideo::compress(const string &videoName) {
+void TotoBVideo::compress(const string &videoName) {
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -17,7 +17,9 @@ void TotoIVideo::compress(const string &videoName) {
 
     for (int frame = 0; frame < this->frameCount; frame++) {
         TotoImage currentFrame = this->frames.at(frame);
-        currentFrame.compress();
+        
+        throw runtime_error("T'as oublié de changer l'appel à la ligne d'après");
+        currentFrame.compress(); // TODO : change to new decompression method
 
         if (showVideo) {
             cv::imshow(videoName, currentFrame.mergeBlocks());
@@ -34,7 +36,7 @@ void TotoIVideo::compress(const string &videoName) {
     }
 }
 
-void TotoIVideo::decompress(const string &videoName) {
+void TotoBVideo::decompress(const string &videoName) {
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -44,7 +46,9 @@ void TotoIVideo::decompress(const string &videoName) {
 
     for (int frame = 0; frame < this->frameCount; frame++) {
         TotoImage currentFrame = this->frames.at(frame);
-        currentFrame.decompress();
+
+        throw runtime_error("T'as oublié de changer l'appel à la ligne d'après");
+        currentFrame.decompress(); // TODO : change to new decompression method
 
         if (showVideo) {
             cv::imshow(videoName, currentFrame.mergeBlocks());
