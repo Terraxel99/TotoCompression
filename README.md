@@ -44,7 +44,8 @@ To build the project, you need to have OpenCV and CMake installed on your machin
 First, clone the project and navigate into it :
 
 ```
-git clone https://github.com/Terraxel99/TotoCompression.cd TotoCompression
+git clone https://github.com/Terraxel99/TotoCompression.
+cd TotoCompression
 ```
 
 Build the project using CMake :
