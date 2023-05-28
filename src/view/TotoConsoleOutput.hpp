@@ -12,7 +12,6 @@ class TotoConsoleOutput : public ITotoOutput {
 
     public:
         void welcomeMessage();
-        void programUsage();
 
         void imageCompressing();
         void imageDecompressing();

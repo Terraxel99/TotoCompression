@@ -55,7 +55,6 @@ void TotoBlock::applyDifference(cv::Mat reference) {
         for (int x = 0; x < channels[channel].size().width; x++) {
             for (int y = 0; y < channels[channel].size().height; y++) {
                 cv::add(channels[channel], referenceChannels[channel], channels[channel]);
-                //channels[channel].at<float>(y, x) = referenceChannels[channel].at<float>(y, x) - channels[channel].at<float>(y, x);
             }
         }
     }
@@ -72,7 +71,6 @@ void TotoBlock::applyAddition(cv::Mat reference) {
         for (int x = 0; x < channels[channel].size().width; x++) {
             for (int y = 0; y < channels[channel].size().height; y++) {
                 cv::subtract(channels[channel], referenceChannels[channel], channels[channel]);
-                //channels[channel].at<float>(y, x) = referenceChannels[channel].at<float>(y, x) + channels[channel].at<float>(y, x);
             }
         }
     }

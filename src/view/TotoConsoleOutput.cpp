@@ -4,13 +4,6 @@ void TotoConsoleOutput::welcomeMessage() {
     cout << "\033[1;36mWelcome to Toto's compression !\033[0m" << endl << endl;
 }
 
-void TotoConsoleOutput::programUsage() {
-    cout << "\033[31mProgram usage :" << endl;
-    cout << "\t--help\t\t\t: To get help about the program" << endl;
-    cout << "\t--compress {input_path} [-o {output_path}]\t: To compress the image at {input_path} and save to {output_path} (optional)." << endl;
-    cout << "\t--decompress {input_path} [-o {output_path}]\t: To decompress the image at {input_path} and save to {output_path} (optional).\033[0m" << endl;
-}
-
 void TotoConsoleOutput::imageCompressing() {
     cout << "\033[36mStarting image compression\033[0m" << endl;
 }
@@ -28,7 +21,7 @@ void TotoConsoleOutput::imageDecompressionEnded() {
 }
 
 void TotoConsoleOutput::displayPSNR(float psnr) {
-    cout << "The PSNR is " << psnr << " dB" << endl;
+    cout << "The PSNR is " << psnr << " dB" << endl << endl;
 }
 
 void TotoConsoleOutput::progressBar(int percentage) {
