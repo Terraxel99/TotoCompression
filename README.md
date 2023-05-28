@@ -3,8 +3,10 @@
 1. [Introduction](#intro)
 2. [Technologies](#technologies)
 3. [Features](#features)
-4. [Program usage](#usage)
-5. [Contributor](#contributor)
+4. [Installation](#installation)
+5. [Program usage](#usage)
+6. [Enhancements](#enchancements)
+7. [Contributor](#contributor)
 
 <a name="intro"></a>
 
@@ -20,7 +22,7 @@ The tool aims to have a simple image and video compression utility that puts in 
 
 The technologies used for this project are C++ with OpenCV library to manipulate the images. To automate the build, I used CMake.
 
-I wanted to keep the project as simple as possible 
+I wanted to keep the project as simple as possible and easy to build on several platforms. This is why I choose CMake.
 
 <a name="features"></a>
 
@@ -28,26 +30,62 @@ I wanted to keep the project as simple as possible
 
 For now, the program can read images and supports the following features :
 
-- Reading an image and applying DCT to it.
-- Reading an image and applying inverse DCT to it.
+- Reading an image, applying DCT and quantization to it, doing the reverse operation and display the PSNR between the original and reconstructed image.
+- Reading a video, applying basic I-frame compression on each frame, doing the reverse operation and display the mean PSNR between the original and reconstructed videos.
+- Reading a video, applying basic D-frame compression for a variable group size, doing the reverse operation and display the mean PSNR between the original and reconstructed videos.
 
 Note that the program supports both grayscale images and coloured images without any problem.
+
+<a name="installation"></a>
+
+## Installation
+To build the project, you need to have OpenCV and CMake installed on your machine.
+
+First, clone the project and navigate into it :
+
+```
+git clone https://github.com/Terraxel99/TotoCompression.cd TotoCompression
+```
+
+Build the project using CMake :
+
+```
+cmake --fresh .
+```
+
+That's it ! Navigate onto the build folder and refer to the [Program usage](#usage) section :
+
+```
+cd build/
+```
 
 <a name="usage"></a>
 
 ## Program usage
 
-To compress an image use the following command :
+To launch a test on images and retrieve the PSNR values, please run :
 
 ```
-TotoCompression --compress {path} [-o {output_path}]
+TotoCompression --image
 ```
 
-To decompress an image use the following command :
+To launch a video test with the I-frame encoding technique, please run :
 
 ```
-TotoCompression --decompress {path} [-o {output_path}]
+TotoCompression --Ivideo
 ```
+
+To launch a video test with the D-frame encoding technique, please run :
+
+```
+TotoCompression --Dvideo
+```
+
+<a name="enchancements"></a>
+
+## Enhancements
+
+The program has been created in such a way that it it possible to change which files are processed by just adding a call to the right function in the main file.
 
 
 <a name="contributor"></a>
