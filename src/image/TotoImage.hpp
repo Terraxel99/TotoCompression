@@ -50,7 +50,10 @@ class TotoImage {
         void compress(bool verbose = false);
         void decompress(bool verbose = false);
 
-        cv::Mat mergeBlocks();
+        void compressWithDifference(cv::Mat reference, bool verbose = false);
+        void decompressWithDifference(cv::Mat reference, bool verbose = false);
+
+        cv::Mat mergeBlocks(bool skipConversion = false);
 
         int getNbBlocks();
 };

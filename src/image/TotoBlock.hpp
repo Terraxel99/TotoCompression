@@ -26,6 +26,9 @@ class TotoBlock {
 
         const cv::Mat getData();
 
+        void applyDifference(cv::Mat reference);
+        void applyAddition(cv::Mat reference);
+
         void DCT();
         void IDCT();
 

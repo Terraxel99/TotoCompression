@@ -46,6 +46,40 @@ void TotoBlock::convertTo(int type, double scale, double delta) {
     this->data.convertTo(this->data, type, scale, delta);
 }
 
+void TotoBlock::applyDifference(cv::Mat reference) {
+    vector<cv::Mat> channels, referenceChannels;
+    cv::split(this->data, channels);
+    cv::split(reference, referenceChannels);
+
+    for (int channel = 0; channel < channels.size(); channel++) {
+        for (int x = 0; x < channels[channel].size().width; x++) {
+            for (int y = 0; y < channels[channel].size().height; y++) {
+                cv::add(channels[channel], referenceChannels[channel], channels[channel]);
+                //channels[channel].at<float>(y, x) = referenceChannels[channel].at<float>(y, x) - channels[channel].at<float>(y, x);
+            }
+        }
+    }
+
+    cv::merge(channels, this->data);
+}
+
+void TotoBlock::applyAddition(cv::Mat reference) {
+    vector<cv::Mat> channels, referenceChannels;
+    cv::split(this->data, channels);
+    cv::split(reference, referenceChannels);
+
+    for (int channel = 0; channel < channels.size(); channel++) {
+        for (int x = 0; x < channels[channel].size().width; x++) {
+            for (int y = 0; y < channels[channel].size().height; y++) {
+                cv::subtract(channels[channel], referenceChannels[channel], channels[channel]);
+                //channels[channel].at<float>(y, x) = referenceChannels[channel].at<float>(y, x) + channels[channel].at<float>(y, x);
+            }
+        }
+    }
+
+    cv::merge(channels, this->data);
+}
+
 void TotoBlock::DCT() {
     vector<cv::Mat> channels;
     cv::split(this->data, channels);

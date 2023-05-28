@@ -2,6 +2,8 @@
 
 #include "TotoVideo.hpp"
 
+#define GOP_SIZE 10
+
 using namespace std;
 
 class TotoDVideo : public TotoVideo {

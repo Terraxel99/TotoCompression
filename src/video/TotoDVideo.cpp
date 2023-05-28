@@ -8,6 +8,7 @@ TotoDVideo::TotoDVideo(const string &filePath)
     : TotoVideo(filePath) { }
 
 void TotoDVideo::compress(const string &videoName) {
+    cv::Mat currentIFrameReference;
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -17,9 +18,13 @@ void TotoDVideo::compress(const string &videoName) {
 
     for (int frame = 0; frame < this->frameCount; frame++) {
         TotoImage currentFrame = this->frames.at(frame);
-        
-        throw runtime_error("T'as oublié de changer l'appel à la ligne d'après");
-        currentFrame.compress(); // TODO : change to new decompression method
+
+        if (frame % GOP_SIZE == 0) {
+            currentFrame.compress();
+            currentIFrameReference = currentFrame.mergeBlocks(true);
+        } else {
+            currentFrame.compressWithDifference(currentIFrameReference);
+        }
 
         if (showVideo) {
             cv::imshow(videoName, currentFrame.mergeBlocks());
@@ -37,6 +42,7 @@ void TotoDVideo::compress(const string &videoName) {
 }
 
 void TotoDVideo::decompress(const string &videoName) {
+    cv::Mat currentIFrameReference;
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -47,8 +53,12 @@ void TotoDVideo::decompress(const string &videoName) {
     for (int frame = 0; frame < this->frameCount; frame++) {
         TotoImage currentFrame = this->frames.at(frame);
 
-        throw runtime_error("T'as oublié de changer l'appel à la ligne d'après");
-        currentFrame.decompress(); // TODO : change to new decompression method
+        if (frame % GOP_SIZE == 0) {
+            currentIFrameReference = currentFrame.mergeBlocks(true);
+            currentFrame.decompress();
+        } else {
+            currentFrame.decompressWithDifference(currentIFrameReference);
+        }
 
         if (showVideo) {
             cv::imshow(videoName, currentFrame.mergeBlocks());
