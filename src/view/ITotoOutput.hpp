@@ -3,7 +3,6 @@ class ITotoOutput {
 
     public:
         virtual void welcomeMessage() = 0;
-        virtual void programUsage() = 0;
 
         virtual void imageCompressing() = 0;
         virtual void imageDecompressing() = 0;

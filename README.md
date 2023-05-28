@@ -34,7 +34,7 @@ For now, the program can read images and supports the following features :
 - Reading a video, applying basic I-frame compression on each frame, doing the reverse operation and display the mean PSNR between the original and reconstructed videos.
 - Reading a video, applying basic D-frame compression for a variable group size, doing the reverse operation and display the mean PSNR between the original and reconstructed videos.
 
-Note that the program supports both grayscale images and coloured images without any problem.
+Note that the program supports both grayscale images and coloured images without any problem. Progressbar is available for image but is not available (yet) for videos, where you can expect more latency while processing.
 
 <a name="installation"></a>
 

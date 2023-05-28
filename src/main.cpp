@@ -5,14 +5,20 @@
 #include "video/TotoIVideo.hpp"
 #include "video/TotoDVideo.hpp"
 
+#include "view/TotoConsoleOutput.hpp"
+
 using namespace std;
 
 void benchmarkImage(const string &path);
 void benchmarkIVideo(const string &path);
 void benchmarkDVideo(const string &path);
 
+TotoConsoleOutput view;
+
 int main(int argc, char** argv) {
     
+    view.welcomeMessage();
+
     if (strcmp("--image", argv[1]) == 0) {
         benchmarkImage("./data/grayscale 256/bird.tif");
         benchmarkImage("./data/colour/monarch.tif");
@@ -48,7 +54,7 @@ void benchmarkImage(const string &path) {
     cv::Mat decompressed = img.mergeBlocks();
     cv::imshow("Decompressed", decompressed);
 
-    cout << "The PSNR is : " << cv::PSNR(original, decompressed, 255.0) << endl << endl;
+    view.displayPSNR(cv::PSNR(original, decompressed, 255.0));
 
     cv::waitKey(0);
 }
@@ -62,7 +68,7 @@ void benchmarkIVideo(const string &path) {
     video.compress("Compressed");
     video.decompress("Decompressed");
 
-    cout << video.computePSNR(originalFrames) << endl;
+    view.displayPSNR(video.computePSNR(originalFrames));
 }
 
 void benchmarkDVideo(const string &path) {
@@ -74,5 +80,5 @@ void benchmarkDVideo(const string &path) {
     video.compress("Compressed");
     video.decompress("Decompressed");
 
-    cout << video.computePSNR(originalFrames) << endl;
+    view.displayPSNR(video.computePSNR(originalFrames));
 }
