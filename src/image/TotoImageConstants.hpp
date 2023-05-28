@@ -15,7 +15,7 @@
 );*/
 
 // Moderate quality
-/*const cv::Mat quantizationMatrix = (cv::Mat_<float>(8, 8) << 
+const cv::Mat quantizationMatrix = (cv::Mat_<float>(8, 8) << 
     8, 6, 5, 8, 12, 20, 26, 31,
     6, 6, 7, 10, 13, 29, 30, 28,
     7, 7, 8, 12, 20, 28, 34, 28,
@@ -24,10 +24,10 @@
     12, 17, 28, 32, 41, 52, 57, 46,
     24, 32, 39, 44, 52, 61, 60, 51,
     35, 46, 48, 49, 56, 50, 51, 49
-);*/
+);
 
 // High quality
-const cv::Mat quantizationMatrix = (cv::Mat_<float>(8, 8) << 
+/*const cv::Mat quantizationMatrix = (cv::Mat_<float>(8, 8) << 
     3 ,  2 ,  2 ,  3 ,  5 ,  8 , 10 , 12,
     2 ,  2 ,  3 ,  4 ,  5 , 12 , 12 , 11,
     3 ,  3 ,  3 ,  5 ,  8 , 11 , 14 , 11,
@@ -36,4 +36,4 @@ const cv::Mat quantizationMatrix = (cv::Mat_<float>(8, 8) <<
     5 ,  7 , 11 , 13 , 16 , 12 , 23 , 18,
     10,  13,  16,  17,  21,  24,  24,  21,
     14,  18,  19,  20,  22,  20,  20,  20
-);
+);*/
