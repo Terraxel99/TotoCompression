@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "image/TotoImage.hpp"
+#include "video/TotoIVideo.hpp"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ int main(int argc, char** argv) {
     }
 
     if (strcmp("--Ivideo", argv[1]) == 0) {
-        benchmarkIVideo("./data/grayscale 256/bird.tif");
+        benchmarkIVideo("./data/video/bus_cif.y4m");
         return 0;
     }
 
@@ -36,15 +37,12 @@ void benchmarkImage(const string &path) {
     cv::Mat original = img.getOriginalImage();
     cv::imshow("Original", original);
 
-    cout << original.type() << endl;
-
     img.compress();
     cv::Mat compressed = img.mergeBlocks();
     cv::imshow("Compressed", compressed);
 
     img.decompress();
     cv::Mat decompressed = img.mergeBlocks();
-    decompressed.convertTo(decompressed, CV_8U);
     cv::imshow("Decompressed", decompressed);
 
     cout << cv::PSNR(original, decompressed, 255.0) << endl;
@@ -53,7 +51,14 @@ void benchmarkImage(const string &path) {
 }
 
 void benchmarkIVideo(const string &path) {
+    TotoIVideo video = TotoIVideo::fromFile(path);
+    video.showVideo("Original");
 
+    video.compress();
+    video.showVideo("Compressed");
+
+    video.decompress();
+    video.showVideo("Decompressed");
 }
 
 void benchmarkDVideo(const string &path) {

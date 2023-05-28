@@ -53,6 +53,4 @@ class TotoImage {
         cv::Mat mergeBlocks();
 
         int getNbBlocks();
-
-        ~TotoImage();
 };

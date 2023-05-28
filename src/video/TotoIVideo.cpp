@@ -5,94 +5,63 @@ TotoIVideo TotoIVideo::fromFile(const string &filePath) {
 }
 
 TotoIVideo::TotoIVideo(const string &filePath) {
-    this->video = cv::VideoCapture(filePath);
+    cv::VideoCapture video(filePath);
 
-    if (!this->video.isOpened()) {
+    if (!video.isOpened()) {
         throw runtime_error("Could not process video file");
     }
 
-    this->fps = this->video.get(cv::CAP_PROP_FPS);
-    this->frameCount = (int)this->video.get(cv::CAP_PROP_FRAME_COUNT);
-    this->frameWidth = (int)this->video.get(cv::CAP_PROP_FRAME_WIDTH);
-    this->frameHeight = (int)this->video.get(cv::CAP_PROP_FRAME_HEIGHT);
-    this->isColoured = (this->video.get(cv::CAP_PROP_CHANNEL) != 1);
-}
+    this->fps = video.get(cv::CAP_PROP_FPS);
+    this->frameCount = (int)video.get(cv::CAP_PROP_FRAME_COUNT);
+    this->frameWidth = (int)video.get(cv::CAP_PROP_FRAME_WIDTH);
+    this->frameHeight = (int)video.get(cv::CAP_PROP_FRAME_HEIGHT);
+    this->isColoured = (video.get(cv::CAP_PROP_CHANNEL) != 1);
 
-TotoIVideo::~TotoIVideo() {
-    this->video.release();
-}
-
-void TotoIVideo::compressAndSave(const string &outputPath) {
-    cv::namedWindow("Video");
-    cv::setWindowProperty("Video", cv::WND_PROP_TOPMOST, 1);
-
-    int frameDelay = 1000 / this->fps; // Time (in ms) between frames to meet expected framerate.
-    int fourcc = cv::VideoWriter::fourcc('X', '2', '6', '4');
-    cv::Size size(this->frameWidth, this->frameHeight);              
-
-    cv::VideoWriter writer(outputPath + ".avi", fourcc, this->fps, size, this->isColoured);
-
-    for (int frameNb = 0; frameNb < this->frameCount; frameNb++) {
+    for (int frame = 0; frame < this->frameCount; frame++) {
         cv::Mat currentFrame;
-
-        if (!this->video.read(currentFrame)) {
-            throw runtime_error("Error occurred while reading frame " + to_string(frameNb));
+        
+        if (!video.read(currentFrame)) {
+            throw runtime_error("Error occurred while reading frame " + to_string(frame));
         }
 
-        string name = "Frame " + to_string(frameNb);
+        const string name = "Frame " + to_string(frame);
         TotoImage img = TotoImage::fromMat(currentFrame, name, false);
 
-        img.compress();
-        cv::Mat result = img.mergeBlocks();
-
-        writer.write(result);
-
-        cv::imshow("Video", result);
-        int keycode = cv::waitKey(frameDelay);
-
-        if (keycode == 27) {
-            break;
-        }
+        this->frames.push_back(img);
     }
 
-    cv::waitKey(0); 
-    cv::destroyWindow("Video");
-    writer.release();
+    video.release();
 }
 
-void TotoIVideo::decompressAndSave(const string &outputPath) {
-    cv::namedWindow("Video");
-    cv::setWindowProperty("Video", cv::WND_PROP_TOPMOST, 1);
+void TotoIVideo::showVideo(const string &videoName) {
+    int frameDelay = 1000 / this->fps; // Time (in ms) between frames to meet expected framerate.
 
-    int frameDelay = 1000 / this->fps;
-    cv::Size size(this->frameWidth, this->frameHeight);
+    cv::namedWindow(videoName);
+    cv::setWindowProperty(videoName, cv::WND_PROP_TOPMOST, 1);
 
-    cv::VideoWriter writer(outputPath + ".avi", cv::VideoWriter::fourcc('F', 'M', 'P', '4'), this->fps, size, this->isColoured);
+    for (int frame = 0; frame < this->frameCount; frame++) {
+        cv::imshow(videoName, this->frames.at(frame).mergeBlocks());
 
-    for (int frameNb = 0; frameNb < this->frameCount; frameNb++) {
-        cv::Mat currentFrame;
-
-        if (!this->video.read(currentFrame)) {
-            throw runtime_error("Error occurred while reading frame " + to_string(frameNb));
-        }
-
-        string name = "Frame " + to_string(frameNb);
-        TotoImage img = TotoImage::fromMat(currentFrame, name, true);
-
-        img.decompress();
-        cv::Mat result = img.mergeBlocks();
-
-        writer.write(result);
-
-        cv::imshow("Video", result);
-        int keycode = cv::waitKey(frameDelay);
-
-        if (keycode == 27) {
-            break;
+        if (cv::waitKey(frameDelay) == 27) {
+            cv::destroyWindow(videoName);
+            return;
         }
     }
 
     cv::waitKey(0);
-    cv::destroyWindow("Video");
-    writer.release();
+    cv::destroyWindow(videoName);
+}
+
+void TotoIVideo::compress() {
+    for (int frame = 0; frame < this->frameCount; frame++) {
+        TotoImage currentFrame = this->frames.at(frame);
+        currentFrame.compress();
+    }
+}
+
+void TotoIVideo::decompress() {
+    for (int frame = 0; frame < this->frameCount; frame++) {
+        TotoImage currentFrame = this->frames.at(frame);
+        currentFrame.decompress();
+    }
 }

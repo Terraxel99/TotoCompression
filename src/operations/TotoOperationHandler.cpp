@@ -30,7 +30,6 @@ void TotoOperationHandler::executeCompressionOperation() {
 
 void TotoOperationHandler::executeImageCompressionOperation() {
     TotoImage image = TotoImage::fromFile(this->operation.inputPath, false);
-
     image.compress(true);
 
     image.save(this->operation.outputPath);
@@ -38,7 +37,7 @@ void TotoOperationHandler::executeImageCompressionOperation() {
 
 void TotoOperationHandler::executeIFrameOnlyVideoCompressionOperation() {
     TotoIVideo video = TotoIVideo::fromFile(this->operation.inputPath);
-    video.compressAndSave(this->operation.outputPath);
+    video.compress();
 }
 
 void TotoOperationHandler::executeDecompressionOperation() {
@@ -68,7 +67,7 @@ void TotoOperationHandler::executeImageDecompressionOperation() {
 
 void TotoOperationHandler::executeIFrameOnlyVideoDecompressionOperation() {
     TotoIVideo video = TotoIVideo::fromFile(this->operation.inputPath);
-    video.decompressAndSave(this->operation.outputPath);
+    video.decompress();
 }
 
 void TotoOperationHandler::executePSNROperation() {

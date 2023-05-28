@@ -1,17 +1,21 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
-//#include <opencv2/core/utils/ffmpeg.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include <vector>
+
 #include "../image/TotoImage.hpp"
+
+#define QUIT_VIDEO_SHOW_KEYCODE 27 // Escape key is 27
 
 using namespace std;
 
 class TotoIVideo {
 
     private:
-        cv::VideoCapture video;
+        vector<TotoImage> frames;
+
         double fps;
         int frameCount;
         int frameWidth;
@@ -23,11 +27,8 @@ class TotoIVideo {
     public:
         static TotoIVideo fromFile(const string &filePath);
 
-        ~TotoIVideo();
+        void compress();
+        void decompress();
 
-        void compressAndSave(const string &outputPath);
-        void decompressAndSave(const string &outputPath);
-
-        void openWriter();
-        void closeWriter();
+        void showVideo(const string &videoName);
 };
