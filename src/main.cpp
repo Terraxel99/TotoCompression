@@ -40,7 +40,7 @@ void benchmarkImage(const string &path) {
     cv::Mat original = img.getOriginalImage();
     cv::imshow("Original", original);
 
-    img.compress();
+    img.compress(true);
     cv::Mat compressed = img.mergeBlocks();
     cv::imshow("Compressed", compressed);
 
@@ -48,7 +48,7 @@ void benchmarkImage(const string &path) {
     cv::Mat decompressed = img.mergeBlocks();
     cv::imshow("Decompressed", decompressed);
 
-    cout << cv::PSNR(original, decompressed, 255.0) << endl;
+    cout << "The PSNR is : " << cv::PSNR(original, decompressed, 255.0) << endl << endl;
 
     cv::waitKey(0);
 }
