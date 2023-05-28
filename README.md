@@ -54,7 +54,7 @@ Build the project using CMake :
 cmake --fresh .
 ```
 
-That's it ! Navigate onto the build folder and refer to the [Program usage](#usage) section :
+That's it ! Navigate into the build folder and refer to the [Program usage](#usage) section :
 
 ```
 cd build/
@@ -88,6 +88,7 @@ TotoCompression --Dvideo
 
 The program has been created in such a way that it it possible to change which files are processed by just adding a call to the right function in the main file.
 
+Note that some #define constants can be changed in order to change the behaviour of the program.
 
 <a name="contributor"></a>
 
