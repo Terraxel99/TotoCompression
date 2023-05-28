@@ -1,13 +1,14 @@
-#include "TotoIVideo.hpp"
+#include "TotoDVideo.hpp"
 
-TotoIVideo TotoIVideo::fromFile(const string &filePath) {
-    return TotoIVideo(filePath);
+TotoDVideo TotoDVideo::fromFile(const string &filePath) {
+    return TotoDVideo(filePath);
 }
 
-TotoIVideo::TotoIVideo(const string &filePath)
+TotoDVideo::TotoDVideo(const string &filePath)
     : TotoVideo(filePath) { }
 
-void TotoIVideo::compress(const string &videoName) {
+void TotoDVideo::compress(const string &videoName) {
+    cv::Mat currentIFrameReference;
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -17,7 +18,13 @@ void TotoIVideo::compress(const string &videoName) {
 
     for (int frame = 0; frame < this->frameCount; frame++) {
         TotoImage currentFrame = this->frames.at(frame);
-        currentFrame.compress();
+
+        if (frame % GOP_SIZE == 0) {
+            currentFrame.compress();
+            currentIFrameReference = currentFrame.mergeBlocks(true);
+        } else {
+            currentFrame.compressWithDifference(currentIFrameReference);
+        }
 
         if (showVideo) {
             cv::imshow(videoName, currentFrame.mergeBlocks());
@@ -34,7 +41,8 @@ void TotoIVideo::compress(const string &videoName) {
     }
 }
 
-void TotoIVideo::decompress(const string &videoName) {
+void TotoDVideo::decompress(const string &videoName) {
+    cv::Mat currentIFrameReference;
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -44,7 +52,13 @@ void TotoIVideo::decompress(const string &videoName) {
 
     for (int frame = 0; frame < this->frameCount; frame++) {
         TotoImage currentFrame = this->frames.at(frame);
-        currentFrame.decompress();
+
+        if (frame % GOP_SIZE == 0) {
+            currentIFrameReference = currentFrame.mergeBlocks(true);
+            currentFrame.decompress();
+        } else {
+            currentFrame.decompressWithDifference(currentIFrameReference);
+        }
 
         if (showVideo) {
             cv::imshow(videoName, currentFrame.mergeBlocks());

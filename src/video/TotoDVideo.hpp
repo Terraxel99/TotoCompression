@@ -2,15 +2,17 @@
 
 #include "TotoVideo.hpp"
 
+#define GOP_SIZE 10
+
 using namespace std;
 
-class TotoIVideo : public TotoVideo {
+class TotoDVideo : public TotoVideo {
 
     private:
-        TotoIVideo(const string &filePath);
+        TotoDVideo(const string &filePath);
 
     public:
-        static TotoIVideo fromFile(const string &filePath);
+        static TotoDVideo fromFile(const string &filePath);
 
         void compress(const string &videoName = "");
         void decompress(const string &videoName = "");

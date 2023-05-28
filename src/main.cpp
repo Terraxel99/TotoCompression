@@ -3,6 +3,7 @@
 
 #include "image/TotoImage.hpp"
 #include "video/TotoIVideo.hpp"
+#include "video/TotoDVideo.hpp"
 
 using namespace std;
 
@@ -25,7 +26,8 @@ int main(int argc, char** argv) {
     }
 
     if (strcmp("--Dvideo", argv[1]) == 0) {
-        benchmarkDVideo("./data/grayscale 256/bird.tif");
+        benchmarkDVideo("./data/video/bus_cif.y4m");
+        benchmarkDVideo("./data/video/container_cif.y4m");
         return 0;
     }
 
@@ -64,5 +66,13 @@ void benchmarkIVideo(const string &path) {
 }
 
 void benchmarkDVideo(const string &path) {
-    throw runtime_error("Not implemented.");
+    TotoDVideo video = TotoDVideo::fromFile(path);
+    vector<cv::Mat> originalFrames = video.retrieveFrames();
+
+    video.showVideo("Original");
+
+    video.compress("Compressed");
+    video.decompress("Decompressed");
+
+    cout << video.computePSNR(originalFrames) << endl;
 }

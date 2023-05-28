@@ -67,7 +67,7 @@ cv::Mat TotoImage::getOriginalImage() {
     return this->original;
 }
 
-cv::Mat TotoImage::mergeBlocks() {
+cv::Mat TotoImage::mergeBlocks(bool skipConversion) {
     cv::Mat output = cv::Mat(this->baseMat.size().height, this->baseMat.size().width, this->baseMat.type());
 
     for (int i = 0; i < this->totalNbBlocks; i++) {
@@ -77,7 +77,9 @@ cv::Mat TotoImage::mergeBlocks() {
         block->getData().copyTo(region);
     }
 
-    output.convertTo(output, CV_8U);
+    if (!skipConversion) {
+        output.convertTo(output, CV_8U);   
+    }
 
     return output;
 }
@@ -105,6 +107,17 @@ void TotoImage::compress(bool verbose) {
     }
 }
 
+void TotoImage::compressWithDifference(cv::Mat reference, bool verbose) {
+    for (int i = 0; i < this->totalNbBlocks; i++) {
+        TotoBlock* block = this->getBlockAt(i);
+        cv::Mat roi = cv::Mat(reference(cv::Rect(block->getBaseImageXOffset(), block->getBaseImageYOffset(), block->getWidth(), block->getHeight())));
+
+        block->applyDifference(roi);
+    }
+
+    this->compress(verbose);
+}
+
 void TotoImage::decompress(bool verbose) {
     if (verbose) {
         this->view->imageDecompressing();
@@ -125,6 +138,17 @@ void TotoImage::decompress(bool verbose) {
     if (verbose) {
         this->view->imageDecompressionEnded();
         this->show();
+    }
+}
+
+void TotoImage::decompressWithDifference(cv::Mat reference, bool verbose) {
+    this->decompress(verbose);
+    
+    for (int i = 0; i < this->totalNbBlocks; i++) {
+        TotoBlock* block = this->getBlockAt(i);
+        cv::Mat roi = cv::Mat(reference(cv::Rect(block->getBaseImageXOffset(), block->getBaseImageYOffset(), block->getWidth(), block->getHeight())));
+
+        block->applyAddition(roi);
     }
 }
 
