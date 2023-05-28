@@ -1,61 +1,68 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "./operations/TotoOperation.hpp"
-#include "./operations/TotoOperationHandler.hpp"
+#include "image/TotoImage.hpp"
+#include "video/TotoIVideo.hpp"
 
 using namespace std;
 
-
-TotoOperation createOperationFromArguments(int argc, char** argv);
+void benchmarkImage(const string &path);
+void benchmarkIVideo(const string &path);
+void benchmarkDVideo(const string &path);
 
 int main(int argc, char** argv) {
-    TotoOperation operation = createOperationFromArguments(argc, argv);
     
-    TotoOperationHandler(operation)
-        .execute();
+    if (strcmp("--image", argv[1]) == 0) {
+        benchmarkImage("./data/grayscale 256/bird.tif");
+        benchmarkImage("./data/colour/monarch.tif");
+        return 0;
+    }
 
-    return 0;
+    if (strcmp("--Ivideo", argv[1]) == 0) {
+        benchmarkIVideo("./data/video/bus_cif.y4m");
+        benchmarkIVideo("./data/video/container_cif.y4m");
+        return 0;
+    }
+
+    if (strcmp("--Dvideo", argv[1]) == 0) {
+        benchmarkDVideo("./data/grayscale 256/bird.tif");
+        return 0;
+    }
+
+    return -1;
 }
 
-// TODO : What if no arguments ? -> ask for operation todo
-TotoOperation createOperationFromArguments(int argc, char** argv) {
-    TotoOperation operation;
+void benchmarkImage(const string &path) {
+    TotoImage img = TotoImage::fromFile(path, false);
 
-    if (argc == 1) {
-        operation.type = TotoOperationType::PrintHelp;
-        return operation;
-    }
+    cv::Mat original = img.getOriginalImage();
+    cv::imshow("Original", original);
 
-    if (argc == 2) {
-        if (strcmp(argv[1], "--help") == 0) {
-            operation.type = TotoOperationType::PrintHelp;
-        } else {
-            throw runtime_error("Unknown command.");
-        }
+    img.compress();
+    cv::Mat compressed = img.mergeBlocks();
+    cv::imshow("Compressed", compressed);
 
-        return operation;
-    }
+    img.decompress();
+    cv::Mat decompressed = img.mergeBlocks();
+    cv::imshow("Decompressed", decompressed);
 
-    operation.inputPath = argv[2];
+    cout << cv::PSNR(original, decompressed, 255.0) << endl;
 
-    if (strcmp(argv[1], "--compress") == 0) {
-        operation.type = TotoOperationType::Compress;
-    } else if (strcmp(argv[1], "--decompress") == 0) {
-        operation.type = TotoOperationType::Decompress;
-    } else {
-        throw runtime_error("Unknown command.");
-    }
+    cv::waitKey(0);
+}
 
-    if (argc != 5) {
-        return operation;
-    }
+void benchmarkIVideo(const string &path) {
+    TotoIVideo video = TotoIVideo::fromFile(path);
+    vector<cv::Mat> originalFrames = video.retrieveFrames();
 
-    if (strcmp(argv[3], "-o") == 0) {
-        operation.outputPath = argv[4];
-    } else {
-        throw runtime_error("Unknown command.");
-    }
+    video.showVideo("Original");
 
-    return operation;
+    video.compress("Compressed");
+    video.decompress("Decompressed");
+
+    cout << video.computePSNR(originalFrames) << endl;
+}
+
+void benchmarkDVideo(const string &path) {
+    throw runtime_error("Not implemented.");
 }

@@ -8,6 +8,8 @@ class ITotoOutput {
         virtual void imageCompressing() = 0;
         virtual void imageDecompressing() = 0;
 
+        virtual void displayPSNR(float psnr) = 0;
+
         virtual void progressBar(int percentage) = 0;
 
         virtual void imageCompressionEnded() = 0;

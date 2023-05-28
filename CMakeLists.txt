@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(TotoCompression)
+
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
@@ -9,6 +10,8 @@ set(SOURCE_FILES
     src/main.cpp
     src/image/TotoImage.cpp
     src/image/TotoBlock.cpp
+    src/image/TotoCompressionMeasure.cpp
+    src/video/TotoIVideo.cpp
     src/operations/TotoOperationHandler.cpp
     src/view/TotoConsoleOutput.cpp)
 

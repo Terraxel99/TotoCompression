@@ -73,7 +73,11 @@ void TotoBlock::quantize() {
     cv::split(this->data, channels);
 
     for (int channel = 0; channel < channels.size(); channel++) {
-        cv::divide(channels[channel], quantizationMatrix, channels[channel]);
+        for (int x = 0; x < channels[channel].size().width; x++) {
+            for (int y = 0; y < channels[channel].size().height; y++) {
+                channels[channel].at<float>(y, x) = (float)(int)(channels[channel].at<float>(y, x) / quantizationMatrix.at<float>(y, x));
+            }
+        }
     }
 
     cv::merge(channels, this->data);
@@ -83,8 +87,12 @@ void TotoBlock::deQuantize() {
     vector<cv::Mat> channels;
     cv::split(this->data, channels);
 
-    for (int channel = 0; channel < channels.size(); channel++) {
-        cv::multiply(channels[channel], quantizationMatrix, channels[channel]);
+    for (int channel = 0; channel < channels.size(); channel++) {        
+        for (int x = 0; x < channels[channel].size().width; x++) {
+            for (int y = 0; y < channels[channel].size().height; y++) {
+                channels[channel].at<float>(y, x) = (float)(int)(channels[channel].at<float>(y, x) * quantizationMatrix.at<float>(y, x));
+            }
+        }
     }
 
     cv::merge(channels, this->data);

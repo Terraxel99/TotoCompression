@@ -2,6 +2,10 @@
 
 #include "TotoOperation.hpp"
 #include "../image/TotoImage.hpp"
+#include "../image/TotoCompressionMeasure.hpp"
+#include "../video/TotoIVideo.hpp"
+
+using namespace std;
 
 class TotoOperationHandler {
     
@@ -9,7 +13,17 @@ class TotoOperationHandler {
         ITotoOutput* view;
 
         TotoOperation operation;
-        void askUserForFlow();
+
+        void executeCompressionOperation();
+        void executeImageCompressionOperation();
+        void executeIFrameOnlyVideoCompressionOperation();
+
+        void executeDecompressionOperation();
+        void executeImageDecompressionOperation();
+        void executeIFrameOnlyVideoDecompressionOperation();
+
+        void executePSNROperation();
+        void executePrintHelpOperation();
 
     public:
         TotoOperationHandler(TotoOperation operation);
