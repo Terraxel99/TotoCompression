@@ -1,13 +1,13 @@
-#include "TotoBVideo.hpp"
+#include "TotoDVideo.hpp"
 
-TotoBVideo TotoBVideo::fromFile(const string &filePath) {
-    return TotoBVideo(filePath);
+TotoDVideo TotoDVideo::fromFile(const string &filePath) {
+    return TotoDVideo(filePath);
 }
 
-TotoBVideo::TotoBVideo(const string &filePath)
+TotoDVideo::TotoDVideo(const string &filePath)
     : TotoVideo(filePath) { }
 
-void TotoBVideo::compress(const string &videoName) {
+void TotoDVideo::compress(const string &videoName) {
     bool showVideo = !videoName.empty();
 
     if (showVideo) {
@@ -36,7 +36,7 @@ void TotoBVideo::compress(const string &videoName) {
     }
 }
 
-void TotoBVideo::decompress(const string &videoName) {
+void TotoDVideo::decompress(const string &videoName) {
     bool showVideo = !videoName.empty();
 
     if (showVideo) {

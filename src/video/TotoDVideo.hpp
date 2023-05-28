@@ -4,13 +4,13 @@
 
 using namespace std;
 
-class TotoBVideo : public TotoVideo {
+class TotoDVideo : public TotoVideo {
 
     private:
-        TotoBVideo(const string &filePath);
+        TotoDVideo(const string &filePath);
 
     public:
-        static TotoBVideo fromFile(const string &filePath);
+        static TotoDVideo fromFile(const string &filePath);
 
         void compress(const string &videoName = "");
         void decompress(const string &videoName = "");

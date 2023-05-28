@@ -3,7 +3,7 @@
 
 #include "image/TotoImage.hpp"
 #include "video/TotoIVideo.hpp"
-#include "video/TotoBVideo.hpp"
+#include "video/TotoDVideo.hpp"
 
 using namespace std;
 
@@ -66,7 +66,7 @@ void benchmarkIVideo(const string &path) {
 }
 
 void benchmarkDVideo(const string &path) {
-    TotoBVideo video = TotoBVideo::fromFile(path);
+    TotoDVideo video = TotoDVideo::fromFile(path);
     vector<cv::Mat> originalFrames = video.retrieveFrames();
 
     video.showVideo("Original");

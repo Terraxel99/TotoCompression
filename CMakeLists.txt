@@ -13,7 +13,7 @@ set(SOURCE_FILES
     src/image/TotoCompressionMeasure.cpp
     src/video/TotoVideo.cpp
     src/video/TotoIVideo.cpp
-    src/video/TotoBVideo.cpp
+    src/video/TotoDVideo.cpp
     src/view/TotoConsoleOutput.cpp)
 
 add_executable(TotoCompression ${SOURCE_FILES})
