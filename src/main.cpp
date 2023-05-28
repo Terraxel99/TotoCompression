@@ -20,6 +20,7 @@ int main(int argc, char** argv) {
 
     if (strcmp("--Ivideo", argv[1]) == 0) {
         benchmarkIVideo("./data/video/bus_cif.y4m");
+        benchmarkIVideo("./data/video/container_cif.y4m");
         return 0;
     }
 
@@ -52,15 +53,16 @@ void benchmarkImage(const string &path) {
 
 void benchmarkIVideo(const string &path) {
     TotoIVideo video = TotoIVideo::fromFile(path);
+    vector<cv::Mat> originalFrames = video.retrieveFrames();
+
     video.showVideo("Original");
 
-    video.compress();
-    video.showVideo("Compressed");
+    video.compress("Compressed");
+    video.decompress("Decompressed");
 
-    video.decompress();
-    video.showVideo("Decompressed");
+    cout << video.computePSNR(originalFrames) << endl;
 }
 
 void benchmarkDVideo(const string &path) {
-
+    throw runtime_error("Not implemented.");
 }

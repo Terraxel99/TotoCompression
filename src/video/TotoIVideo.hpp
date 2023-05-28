@@ -17,9 +17,7 @@ class TotoIVideo {
         vector<TotoImage> frames;
 
         double fps;
-        int frameCount;
-        int frameWidth;
-        int frameHeight;
+        int frameCount, frameWidth, frameHeight, frameDelay;
         bool isColoured;
 
         TotoIVideo(const string &filePath);
@@ -27,8 +25,12 @@ class TotoIVideo {
     public:
         static TotoIVideo fromFile(const string &filePath);
 
-        void compress();
-        void decompress();
+        void compress(const string &videoName = "");
+        void decompress(const string &videoName = "");
+
+        vector<cv::Mat> retrieveFrames();
+
+        double computePSNR(const vector<cv::Mat> &comparisonFrames);
 
         void showVideo(const string &videoName);
 };
